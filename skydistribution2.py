@@ -1,4 +1,4 @@
-#import sqlite3
+
 import csv
 import numpy as np
 import matplotlib
@@ -8,185 +8,90 @@ import astropy.units as u
 from astropy.io import ascii
 
 
+# TELLS PYTHON WE WILL BE USING THE CSV FILE
 
-
-with open('membershipad.csv', 'rU') as file: #tells python we will be using the csv file
+with open('membershipad.csv', 'rU') as file:
 
     with open ('nomembershipad.csv', 'rU') as filenm:
-
-        reader = csv.reader(file) # reads csv file
+        
+        # READS MEMBERSHIPADHIST.CSV FILE FOR OBJECTS WITH MEMBERSHIP
+        reader = csv.reader(file)
+        # READS MEMBERSHIPADHIST.CSV FILE FOR OBJECTS WITH NO MEMBERSHIP
         readernm = csv.reader(filenm)
-    
- #   conn = sqlite3.connect('bdnyc.db')  #tells python we will be using this database
- #   c = conn.cursor() #reads conn
+
+
+        # THIS CREATES ARRAYS TO HOLD THE RA's FOR EACH OBJECT
         ratuc = []
         raab = []
-  #  ranone = []
         rabeta = []
         raargus = []
- #   raher = []
- #   raursa =[]
- #   raambig = []
         racolum = []
         ratw = []
         ranone = []
-    
+
+        # SHORTCUT TO CHECK IN THE CSV FILE WHICH MOVING GROUP EACH OF THEM ARE IN (TO AVOID SCREWING UP)
         tuc = 'tucana'
         ab = 'abdora'
-   # nostar = 'None'
         beta = 'betapic'
         argus = 'argus'
-   # her = 'Old (Her-Lyr)'
-   # ursa = 'Old (Ursa Majo'
-   # ursa2 = 'Old (Ursa Major)'
-   # ambig = 'Ambiguous'
         colum = 'columba'
         tw = 'twhydra'
-    
+
+        # THIS CREATES ARRAYS TO HOLD DECLINATIONS FOR EACH OBJECT
         dtuc = []
         dab = []
-  #  dnone = []
         dbeta = []
         dargus = []
-  #  dher = []
-  #  dursa = []
-  #  dambig = []
         dcolum = []
         dtw = []
         dnone = []
 
+# WHAT DOES THIS DO?        
         nametuc = []
         nameab = []
         namenone = []
         namebeta = []
         nameargus = []
-  #  nameher = []
-  #  nameursa = []
-  #  nameambig = []
         namecolum = []
         nametw = []
     
 
+        # GOES THROUGH READERNM FILE LINE BY LINE
         for line in readernm:
 
             ranone.append(float(line[9]))        
             dnone.append(float(line[10]))         
             namenone.append(str(line[0]))
-            
+        # GOES THROUGH READER FILE LINE BY LINE    
         for line in reader:
-     #   if len(line[0].strip()) == 9:
-          #  t= (line[0].strip(),)
-            
-            
-            #for row in reader:
+
+            # MAKES A STRING TO CHECK WHAT 
             linecomp = line[24].strip()
             if linecomp == tuc:
                 ratuc.append(float(line[9]))
                 dtuc.append(float(line[10]))
-                #nametuc.append(line[0])
+                
             elif linecomp == ab:
                 raab.append(float(line[9]))
                 dab.append(float(line[10]))
-                 #   nameab.append(row[7])
-              #  elif linecomp == nostar:
-               #     ranone.append(row[9])
-                #    dnone.append(row[10])
-                 #   namenone.append(row[7])
+                 
             elif linecomp == beta:
                 rabeta.append(float(line[9]))
                 dbeta.append(float(line[10]))
-                 #   namebeta.append(row[7])
+                 
             elif linecomp== argus:
                 raargus.append(float(line[9]))
                 dargus.append(float(line[10]))
-                  #  nameargus.append(row[7])
-              #  elif linecomp == her:
-               #     raher.append(row[9])
-                #    dher.append(row[10])
-                  #  nameher.append(row[7])
-              #  elif linecomp == ursa or linecomp == ursa2:
-               #     raursa.append(row[9])
-                #    dursa.append(row[10])
-                 #   nameursa.append(row[7])
-              #  elif linecomp == ambig:
-               #     raambig.append(row[9])
-                #    dambig.append(row[10])
-                  #  nameambig.append(row[7])
+                  
             elif linecomp == colum:
                 racolum.append(float(line[9]))
                 dcolum.append(float(line[10]))
-                 #   namecolum.append(row[7])
+                 
             elif linecomp == tw:
                 ratw.append(float(line[9]))
                 dtw.append(float(line[10]))
-                  #  nametw.append(row[7])
-            
-
-    #for s in sidtuc:
-    #    t=(s,)
-    #    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-    #        if not isinstance(row[2], basestring):
-    #            spectuc.append(row[2])
-
-    #for s in sidab:
-    #    t=(s,)
-    #    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-    #        if not isinstance(row[2], basestring):
-    #            specab.append(row[2])
-
-    #for s in sidnone:
-    #    t=(s,)
-    #    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-    #        if not isinstance(row[2], basestring):
-    #            specnone.append(row[2])
-
-    #for s in sidbeta:
-    #    t=(s,)
-    #    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-    #        if not isinstance(row[2], basestring):
-    #            specbeta.append(row[2])
-
-    #for s in sidargus:
-    #    t=(s,)
-    #    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-    #        if not isinstance(row[2], basestring):
-    #            specargus.append(row[2])
-
-    #for s in sidher:
-    #    t=(s,)
-    #    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-    #        if not isinstance(row[2], basestring):
-    #            specher.append(row[2])
-
-    #for s in sidursa:
-    #    t=(s,)
-    #    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-    #        if not isinstance(row[2], basestring):
-    #            specursa.append(row[2])
-
-    #for s in sidambig:
-    #    t=(s,)
-    #    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-    #        if not isinstance(row[2], basestring):
-    #            specambig.append(row[2])
-
-    #for s in sidcolum:
-    #    t=(s,)
-    #    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-    #        if not isinstance(row[2], basestring):
-    #            speccolum.append(row[2])
-
-    #for s in sidtw:
-    #    t=(s,)
-    #    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-    #        if not isinstance(row[2], basestring):
-    #            spectw.append(row[2])
-                
-    #conn.close()
-
-    #print ratuc
-    
-# ascii.write([ratuc, dtuc, nametuc], 'tucdata1.csv', delimiter = ',')
+                  
+              
     
 
 ratuc = coord.Angle(ratuc*u.degree)
@@ -209,18 +114,6 @@ raargus = coord.Angle(raargus*u.degree)
 raargus = raargus.wrap_at(180*u.degree)
 dargus = coord.Angle(dargus*u.degree)
 
-#raher = coord.Angle(raher*u.degree)
-#raher = raher.wrap_at(180*u.degree)
-#dher = coord.Angle(dher*u.degree)
-
-#raursa = coord.Angle(raursa*u.degree)
-#raursa = raursa.wrap_at(180*u.degree)
-#dursa = coord.Angle(dursa*u.degree)
-
-#raambig = coord.Angle(raambig*u.degree)
-#raambig = raambig.wrap_at(180*u.degree)
-#dambig = coord.Angle(dambig*u.degree)
-
 racolum = coord.Angle(racolum*u.degree)
 racolum = racolum.wrap_at(180*u.degree)
 dcolum = coord.Angle(dcolum*u.degree)
@@ -228,10 +121,6 @@ dcolum = coord.Angle(dcolum*u.degree)
 ratw = coord.Angle(ratw*u.degree)
 ratw = ratw.wrap_at(180*u.degree)
 dtw = coord.Angle(dtw*u.degree)
-
-#print (ranone, "stop", dnone, "stop", namenone)
-
-#ascii.write([ranone, dnone, namenone], 'namedata.csv', delimiter = ',')
 
 
 fig = plt.figure(figsize=(8,6))
@@ -242,9 +131,6 @@ ax.scatter(raab.radian,dab.radian, c = "g", label = "AB Doradus")
 ax.scatter(ranone.radian,dnone.radian, c = ".96", label = "None")
 ax.scatter(rabeta.radian,dbeta.radian, c = "y", label = "Beta Pictorus")
 ax.scatter(raargus.radian,dargus.radian, c = "c", label = "Argus")
-#ax.scatter(raher.radian,dher.radian, c = "m", label = "Old (Her-Lyr)")
-#ax.scatter(raursa.radian,dursa.radian, c = "k", label = "Old (Ursa Major)")
-#ax.scatter(raambig.radian,dambig.radian, c = ".5", label = "Ambiguous")
 ax.scatter(racolum.radian,dcolum.radian, c = "m", label = "Columba")
 ax.scatter(ratw.radian,dtw.radian, c = "r", label = "TW Hya")
 
@@ -253,17 +139,3 @@ ax.grid(True)
 plt.legend(bbox_to_anchor=(1.05, 1.25), loc = 1, borderaxespad=0., prop={'size': 7})
 fig.savefig("map.pdf")
 
-#spec = [spectuc, specab, specnone, specbeta, specargus, specher, specursa, specambig, speccolum, spectw]
-
-#n_bins = 24
-
-#fig, axes = plt.subplots(nrows=1, ncols=1)
-#ax0 = axes
-
-#c = ['Tuc-Hor', 'AB Dor', 'None', 'beta Pic', 'Argus', 'Old (Her-Lyr)', 'Old (Ursa Major)', 'Ambiguous', 'Columba', 'TW Hya']
-#color_c= ['b','g','r','y','c','m','k','.5','.75','.9']
-#ax0.hist(spec, n_bins, histtype='bar', label = c, stacked = True, color=color_c)
-#ax0.legend(prop={'size':10})
-#ax0.set_title('spectral type vs moving group')
-
-#plt.show()

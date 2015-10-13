@@ -62,7 +62,7 @@ with open('groupcbar.csv', 'rU') as file:
         dtw = []
         dnone = []
 
-                    # WHAT DOES THIS DO?        
+        # THIS RECORDS NAME(SHORTNAME, LONGNAME, ETC) OF EACH OBJECT        
         nametuc = []
         nameab = []
         namenone = []
@@ -79,6 +79,15 @@ with open('groupcbar.csv', 'rU') as file:
         specargus = []
         speccolum = []
         spectw = []
+
+        # THIS CREATES ARRAY TO RECORD OBJECTS WITH NO ADOPTED SPECTRAL TYPES
+        noadoptuc = []
+        noadopab = []
+        noadopnone = []
+        noadopbeta = []
+        noadopargus = []
+        noadopcolum = []
+        noadoptw = []
 
         # THIS SECTION EXTRACTS THE SPECTRAL TYPES
         
@@ -168,14 +177,21 @@ with open('groupcbar.csv', 'rU') as file:
             t=(s,)
             # GOES BACK TO DATABASE IN THE SPRECTRAL TYPES TABLE AND PULLS THE SPECTRAL TYPE FOR THAT OBJECT
             for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-
+                # COUNTS HOW MANY DIFFERENT SPECTRAL TYPES THERE ARE FOR A GIVEN SOURCE ID
                 x = x+1
+            # IF THERE IS MORE THAN ONE SPECTRAL TYPE    
             if x > 1:
-                
+                y = 0
+                # USE THE ONE THAT HAS ADOPTED = 1
                 for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
-                    if not isinstance(row[2], basestring):
-                        spectuc.append(floor(row[2]))
- 
+                    y = y+1
+                if y ==0:
+                    noadoptuc.append(row[1])
+                else:
+                    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                        if not isinstance(row[2], basestring):
+                            spectuc.append(floor(row[2]))
+            # IF THERE IS JUST ONE SPECTRAL TYPE, USE THAT
             else:
                 for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?',t):
               # NEED TO FIND OUT WHY I DID THIS                
@@ -188,38 +204,134 @@ with open('groupcbar.csv', 'rU') as file:
         for s in sidab:
             t=(s,)
             for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-                if not isinstance(row[2], basestring):
-                    specab.append(floor(row[2]))
+                x = x+1
+            if x > 1:
+                y = 0
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                    y = y+1
+                if y == 0:
+                    noadopab.append(row[1])
+                else:
+                    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                        if not isinstance(row[2], basestring):
+                            specab.append(floor(row[2]))
+            else:
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?',t):
+                    if not isinstance(row[2], basestring):
+                        specab.append(floor(row[2]))
+
+            x = 0
+
 
         for s in sidnone:
             t=(s,)
             for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-                if not isinstance(row[2], basestring):
-                    specnone.append(floor(row[2]))
+                x = x+1
+            if x > 1:
+                y = 0
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                    y = y+1
+                if y == 0:
+                    noadopnone.append(row[1])
+                else:
+                    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                        if not isinstance(row[2], basestring):
+                            specnone.append(floor(row[2]))
+            else:
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?',t):
+                    if not isinstance(row[2], basestring):
+                        specnone.append(floor(row[2]))
 
+            x = 0            
+
+            
         for s in sidbeta:
             t=(s,)
             for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-                if not isinstance(row[2], basestring):
-                    specbeta.append(floor(row[2]))
+                x = x+1
+            if x > 1:
+                y = 0
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                     y = y+1
+                if y == 0:
+                    noadopbeta.append(row[1])
+                else:
+                    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                        if not isinstance(row[2], basestring):
+                            specbeta.append(floor(row[2]))
+            else:
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?',t):
+                    if not isinstance(row[2], basestring):
+                        specbeta.append(floor(row[2]))
+
+            x = 0                
+
 
         for s in sidargus:
             t=(s,)
             for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-                if not isinstance(row[2], basestring):
-                    specargus.append(floor(row[2]))
+                x = x+1
+            if x > 1:
+                y = 0
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                     y = y+1
+                if y == 0:
+                    noadopargus.append(row[1])
+                else:
+                    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                        if not isinstance(row[2], basestring):
+                            specargus.append(floor(row[2]))
+            else:
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?',t):
+                    if not isinstance(row[2], basestring):
+                        specargus.append(floor(row[2]))
+
+            x = 0
+
 
         for s in sidcolum:
             t=(s,)
             for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-                if not isinstance(row[2], basestring):
-                    speccolum.append(floor(row[2]))
+                x = x+1
+            if x > 1:
+                y = 0
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                     y = y+1
+                if y == 0:
+                    noadopcolum.append(row[1])
+                else:
+                    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                        if not isinstance(row[2], basestring):
+                            speccolum.append(floor(row[2]))
+            else:
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?',t):
+                    if not isinstance(row[2], basestring):
+                        speccolum.append(floor(row[2]))
+
+            x = 0
 
         for s in sidtw:
             t=(s,)
             for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?', t):
-                if not isinstance(row[2], basestring):
-                    spectw.append(floor(row[2]))
+                x = x+1
+            if x > 1:
+                y = 0
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                     y = y+1
+                if y == 0:
+                    noadoptw.append(row[1])
+                else:
+                    for row in c.execute('SELECT * FROM spectral_types WHERE source_id =? AND adopted = 1',t):
+                        if not isinstance(row[2], basestring):
+                            spectw.append(floor(row[2]))
+            else:
+                for row in c.execute('SELECT * FROM spectral_types WHERE source_id =?',t):
+                    if not isinstance(row[2], basestring):
+                        spectw.append(floor(row[2]))
+
+            x = 0
+
+        
 
         # STOPS USING BDNYC DATABASE
         conn.close()
@@ -280,8 +392,14 @@ with open('groupcbar.csv', 'rU') as file:
          #THAT SECTION EXTRACTED THE RIGHT ASCENSIONS AND DECLINATIONS
 
 ### TEST SECTION ###
-print (len(ratw), len(dtw), len(sidtw), len(spectw))
-
+# THE NUMBER SHOWN IS THE SOURCE ID 
+print ("Objects in AB Doradus with ambiguous spectral type:", noadopab)
+print ("Objects with no group with ambiguous spectral type:", noadopnone)
+print ("Objects in Tuc-Hor with ambiguous spectral type:", noadoptuc)
+print ("Objects in Beta-Pic with ambiguous spectral type:", noadopbeta)
+print ("Objects in Argus with ambiguous spectral type:", noadopargus)
+print ("Objects in Columba with ambiguous spectral type:", noadopcolum)
+print ("Objects in TW Hya with ambiguous spectral type:", noadoptw)
 ### END TEST SECTION ###
 
 ratuc = coord.Angle(ratuc*u.degree)

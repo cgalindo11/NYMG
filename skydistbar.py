@@ -9,6 +9,7 @@ import astropy.coordinates as coord
 import astropy.units as u
 from astropy.io import ascii
 from math import floor
+from matplotlib.colors import Normalize
 
 
 # TELLS PYTHON WE WILL BE USING THE CSV FILE
@@ -400,6 +401,11 @@ print ("Objects in Beta-Pic with ambiguous spectral type:", noadopbeta)
 print ("Objects in Argus with ambiguous spectral type:", noadopargus)
 print ("Objects in Columba with ambiguous spectral type:", noadopcolum)
 print ("Objects in TW Hya with ambiguous spectral type:", noadoptw)
+
+print (len(rabeta))
+print (len(dbeta))
+print (len(specbeta))
+print (spectuc)
 ### END TEST SECTION ###
 
 ratuc = coord.Angle(ratuc*u.degree)
@@ -430,25 +436,55 @@ ratw = coord.Angle(ratw*u.degree)
 ratw = ratw.wrap_at(180*u.degree)
 dtw = coord.Angle(dtw*u.degree)
 
+### Steph's suggestion
+# replace cubehelix with whichever colormap you want, 
+# it looks like you're using autumn
+cmap = plt.cm.hot
+
+
+# Use the minimum and maximum SpT values you have here
+# colormaps usually use values 0->1, so you're telling it the range of values you need it to cover
+# And if the later types are too light, increase vmax or change your colormap
+color_norm = Normalize(vmin=6, vmax=18)
+### end Steph's suggestions
+
 
 fig = plt.figure(figsize=(8,6))
-ax = fig.add_subplot(111, projection="hammer")
+ax = fig.add_subplot(111, projection="mollweide")
 
-cax1 = ax.scatter(ratuc.radian, dtuc.radian, c = "b", label = "Tuc-Hor")
-cax2 = ax.scatter(raab.radian,dab.radian, c = "g", label = "AB Doradus")
-cax3 = ax.scatter(ranone.radian,dnone.radian, c = ".96", label = "None")
-cax4 = ax.scatter(rabeta.radian,dbeta.radian, c = "y", label = "Beta Pictorus")
-cax5 = ax.scatter(raargus.radian,dargus.radian, c = "c", label = "Argus")
-cax6 = ax.scatter(racolum.radian,dcolum.radian, c = "m", label = "Columba")
-cax = ax.scatter(ratw.radian,dtw.radian, c="r", label = "TW Hya") #c = "r"
+### Steph's suggestion
+# then, your plot call should look like this (plug in your values):
+### ax.scatter(ra, dec, c=spectral_types, cmap=cmap, marker="o", markersize=30, label="label", norm=color_norm)
+# c=spectral_types means it will color the points according to the spectral types
+# cmap=cmap tells it what colormap to use
+# norm=color_norm sets the normalization
+### Steph's suggestion
+
+spectypes = ["M6",  "M8",  "L0",  "L2",  "L4",  "L6",  "L8"]
+cax1 = ax.scatter(ratuc.radian, dtuc.radian, c = spectuc, cmap = cmap, marker = "s", label = "Tuc-Hor", norm=color_norm)
+#cax2 = ax.scatter(raab.radian,dab.radian, c = "g", label = "AB Doradus")
+#cax3 = ax.scatter(ranone.radian,dnone.radian, c = ".96", label = "None")
+#cax4 = ax.scatter(rabeta.radian, dbeta.radian, c = specbeta, cmap = cmap1, label = "Beta Pictoris", norm=color_norm)
+#cax5 = ax.scatter(raargus.radian,dargus.radian, c = "c", label = "Argus")
+cax6 = ax.scatter(racolum.radian,dcolum.radian, c = speccolum, cmap = cmap, marker = "o", label = "Columba", norm=color_norm)
+#cax = ax.scatter(ratw.radian,dtw.radian, c="r", label = "TW Hya") #c = "r"
 
 ax.set_xticklabels(['14h','16h','18h','20h','22h','0h','2h','4h','6h','8h','10h'])
 ax.grid(True)
 plt.legend(bbox_to_anchor=(1.05, 1.25), loc = 1, borderaxespad=0., prop={'size': 7})
 
-m=cm.ScalarMappable(cmap=cm.autumn)
-m.set_array([0, .25,.5,.75, 1])
-cbar = fig.colorbar(m, orientation='horizontal', spacing=u'uniform')
+axo = plt.gca()
+legend = axo.get_legend()
+legend.legendHandles[0].set_color('white')
+legend.legendHandles[0].set_edgecolor('black')
+legend.legendHandles[1].set_color('white')
+legend.legendHandles[1].set_edgecolor('black')
+
+m=cm.ScalarMappable(cmap=cm.hot)
+#m.set_array([0, .25,.5,.75, 1])
+m.set_array([-3, -2, -1, 0, 1, 2, 3])
+cbar = fig.colorbar(m, orientation='horizontal', ticks=[-3, -2, -1, 0, 1, 2, 3], spacing=u'uniform')
+cbar.ax.set_xticklabels(spectypes)
 
 fig.savefig("map3.pdf")
 
